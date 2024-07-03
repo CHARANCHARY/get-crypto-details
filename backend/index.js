@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const Ticker = require("./models/tickerModel");
+const Ticker = require("./models/tickerModel.js");
 const axios = require("axios");
 
 dotenv.config();
@@ -14,12 +15,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+
 
 // Fetch data from API and store in MongoDB
-app.get("/fetch-data", async (req, res) => {
+app.get("/get-data", async (req, res) => {
   try {
     const response = await axios.get("https://api.wazirx.com/api/v2/tickers");
     const tickers = Object.values(response.data);
@@ -38,6 +37,7 @@ app.get("/fetch-data", async (req, res) => {
 
     const savedTickers = await Ticker.insertMany(topTickerData);
     res.json(savedTickers);
+    console.log("data stored")
   } catch (error) {
     console.error(error);
     res.status(500).send("Error fetching data from API");

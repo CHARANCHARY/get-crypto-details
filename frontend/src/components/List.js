@@ -6,16 +6,12 @@ export default function List() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  axios
-    .delete("https://quadb-abkv.onrender.com/delete-data")
-    .then((response) => {
-      console.log("data deleted", response);
-    });
+
   useEffect(() => {
-    axios.get("https://quadb-abkv.onrender.com/fetch-data").then((response) => {
+    axios.get("http://localhost:5000/fetch-data").then((response) => {
       console.log("data fetched", response);
       axios
-        .get("https://quadb-abkv.onrender.com/get-data")
+        .get("http://localhost:5000/get-data")
         .then((response) => {
           console.log("data get");
 
@@ -29,6 +25,8 @@ export default function List() {
         });
     });
   }, []);
+
+  const newData = data.slice(0, 10);
   return (
     <div className="trade-list h-screen">
       <div className="list--head">
@@ -43,7 +41,7 @@ export default function List() {
 
       {error && <div>Error: {error.message}</div>}
 
-      {data.map((item, index) => (
+      {newData.map((item, index) => (
         <ListItem
           key={index}
           index={index}
